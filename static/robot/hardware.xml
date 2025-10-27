@@ -1,0 +1,23 @@
+<!--Version 1.0 20170921 mibo evt param-->
+<hardware name="mibo">
+    
+    <motor  positionInit="2048" positionOrigin="2048" id="1" positionMax="2275" fullDegree="360" positionMin="1820" speedInit="50" speedMax="1023" speedMin="0" rotateDirection="-1"  name="neck_y"  mayaNameArg="Mibo_rig:Head_rx_ctl" mayaParamArg="rotateX" color="-12829441" radiusScale="1" velocityLimit = "120" accelerationLimit = "1800"/>
+    <motor positionInit="2048" positionOrigin="2048" id="2" positionMax="2400" fullDegree="360" positionMin="1695" speedInit="50"  speedMax="1023" speedMin="0" rotateDirection="-1" name="neck_z"   mayaNameArg="Mibo_rig:Head_ry_ctl2" mayaParamArg="rotateY" color="-65536" radiusScale="1" velocityLimit = "300" accelerationLimit = "1800" />
+
+    <motor positionInit="2082" positionOrigin="2048" id="3" positionMax="2104" fullDegree="360" positionMin="1081" speedInit="50" speedMax="1023" speedMin="0" rotateDirection="1" name="right_shoulder_z"  mayaNameArg="Mibo_rig:Rgt_shoulder_ctl" mayaParamArg="rotateY" mayaDirection="-1" color="-10223516" radiusScale="1" velocityLimit = "216" accelerationLimit = "35530" />  
+    <motor  positionInit="2878" positionOrigin="2787" id="4" positionMax="3583" fullDegree="360" positionMin="512" speedInit="50" speedMax="1023" speedMin="0" rotateDirection="1" name="right_shoulder_y"   mayaNameArg="Mibo_rig:Rgt_arm_rx_ctl" mayaParamArg="rotateX" color="-4980481" radiusScale="1" velocityLimit = "360" accelerationLimit = "1800" />
+    <motor positionInit="2503" positionOrigin="2559" id="5" positionMax="2594" fullDegree="360" positionMin="1422" speedInit="50" speedMax="1023" speedMin="0" rotateDirection="-1" name="right_shoulder_x" mayaNameArg="Mibo_rig:Rgt_arm_rz_ctl" mayaParamArg="rotateZ" mayaDirection="-1" color="-4915456" radiusScale="1" velocityLimit = "216" accelerationLimit = "1800" />
+    <motor positionInit="1877" positionOrigin="2048" id="6" positionMax="2048" fullDegree="360" positionMin="1138" speedInit="50" speedMax="1023" speedMin="0" rotateDirection="1" name="right_elbow_y"   mayaNameArg="Mibo_rig:Rgt_forearm_ctl" mayaParamArg="rotateX" color="-8519811" radiusScale="1"  velocityLimit = "216" accelerationLimit = "1800" />
+    
+    <motor positionInit="2013" positionOrigin="2048" id="7" positionMax="3014" fullDegree="360" positionMin="1991" speedInit="50" speedMax="1023" speedMin="0" rotateDirection="-1" name="left_shoulder_z"   mayaNameArg="Mibo_rig:Lft_shoulder_ctl" mayaParamArg="rotateY" color="-39936" radiusScale="1" velocityLimit = "216" accelerationLimit = "1800" />
+    <motor positionInit="1217" positionOrigin="1308" id="8" positionMax="3583" fullDegree="360" positionMin="512" speedInit="50" speedMax="1023" speedMin="0" rotateDirection="-1" name="left_shoulder_y"   mayaNameArg="Mibo_rig:Lft_arm_rx_ctl" mayaParamArg="rotateX" color="-10210716" radiusScale="1" velocityLimit = "360" accelerationLimit = "1800" />
+    <motor positionInit="1593" positionOrigin="1536" id="9" positionMax="2673" fullDegree="360" positionMin="1502" speedInit="50" speedMax="1023" speedMin="0" rotateDirection="1" name="left_shoulder_x"   mayaNameArg="Mibo_rig:Lft_arm_rz_ctl" mayaParamArg="rotateZ" color="-10197966" radiusScale="1" velocityLimit = "216" accelerationLimit = "1800" />
+    <motor positionInit="2218" positionOrigin="2048" id="10" positionMax="2958" fullDegree="360" positionMin="2048" speedInit="50" speedMax="1023" speedMin="0" rotateDirection="-1" name="left_elbow_y"   mayaNameArg="Mibo_rig:Lft_forearm_ctl" mayaParamArg="rotateX" color="-10223361" radiusScale="1" velocityLimit = "216" accelerationLimit = "1800" />
+
+
+    <led id = "1" name="led_head" mayaNameArg="Mibo_rig:Head_ry_ctl2" mayaParamArg="led01_head" enable="1" state="1" bright="1" color="-65536"  radiusScale="1" />
+    <led id = "2" name="led_chest" mayaNameArg="Mibo_rig:Head_ry_ctl2" mayaParamArg="led02_neck" enable="1" state="1" bright="1" color="-65536"  radiusScale="1" />
+    <led id = "3" name="led_right_hand" mayaNameArg="Mibo_rig:Head_ry_ctl2" mayaParamArg="led03_l_hand" enable="1" state="1" bright="1" color="-65536"  radiusScale="1" />
+    <led id = "4" name="led_left_hand" mayaNameArg="Mibo_rig:Head_ry_ctl2" mayaParamArg="led04_r_hand" enable="1" state="1" bright="1" color="-65536"  radiusScale="1" />
+    <platform nameX="platform_x" mayaNameArgX="Mibo_rig:Mov_ctl" mayaParamArgX="translateZ" nameY="platform_y" mayaNameArgY="Mibo_rig:Mov_ctl" mayaParamArgY="translateX" nameTheta="platform_theta" mayaNameArgTheta="Mibo_rig:Mov_ctl" mayaParamArgTheta="rotateY" />
+</hardware>

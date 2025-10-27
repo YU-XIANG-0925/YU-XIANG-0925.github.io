@@ -1,0 +1,541 @@
+<!--Version 1.8 2017/06/21-->
+<robot name="mibo">
+	<!--Head-->
+    <joint name="neck_y" type="continuous"  >
+        <parent link="neck_y_link"/>
+        <child link="neck_z_link"/>
+        <origin xyz="0 0 0" rpy="0 -0.20943951 0"/> 
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <joint name="neck_z" type="continuous" >
+        <parent link="neck_z_link"/> 
+        <child link="face_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+     <joint name="head1" type="continuous" >
+        <parent link="face_link"/>
+        <child link="head1_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <joint name="head2" type="continuous" >
+        <parent link="head1_link"/>
+        <child link="head2_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <joint name="head3" type="continuous" >
+        <parent link="head2_link"/>
+        <child link="head3_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <joint name="head4" type="continuous" >
+        <parent link="head3_link"/>
+        <child link="head4_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <!--waist
+    <joint name="waist_y" type="continuous"  >
+        <parent link="platform_link"/>
+        <child link="center_link"/>
+        <origin xyz="-0.00325 0 0.07136" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>-->
+    <!--Right Arm-->
+    <joint name="right_shoulder_z" type="continuous">
+        <parent link="right_clavicle_link"/>
+        <child link="right_shoulder_scapula_link"/>        
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <joint name="right_shoulder_y" type="continuous"  >
+        <parent link="right_shoulder_scapula_link"/>
+        <child link="right_shoulder_link"/>
+        <origin xyz="0 -0.0759 0" rpy="0 -0.20943951 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+    <joint name="right_shoulder_x" type="continuous"  >
+        <parent link="right_shoulder_link"/>
+        <child link="right_upper_arm_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+    </joint>
+    <joint name="right_shoulder_x2" type="continuous"  >
+        <parent link="right_upper_arm_link"/>
+        <child link="right_upper_arm2_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+    </joint>
+    <joint name="right_elbow_y" type="continuous" >
+        <parent link="right_upper_arm_link"/>
+        <child link="right_lower_arm_link"/>
+        <origin xyz="0 -0.019 -0.0586" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+
+    <!--Left Arm-->
+    <joint name="left_shoulder_z" type="continuous" >
+        <parent link="left_clavicle_link"/>
+        <child link="left_shoulder_scapula_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <joint name="left_shoulder_y" type="continuous">
+        <parent link="left_shoulder_scapula_link"/>
+        <child link="left_shoulder_link"/>
+        <origin xyz="0 0.0759 0" rpy="0 -0.20943951 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+    <joint name="left_shoulder_x" type="continuous" >
+        <parent link="left_shoulder_link"/>
+        <child link="left_upper_arm_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+    </joint>
+    <joint name="left_shoulder_x2" type="continuous" >
+        <parent link="left_upper_arm_link"/>
+        <child link="left_upper_arm2_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+    </joint>
+    <joint name="left_elbow_y" type="continuous" >
+        <parent link="left_upper_arm_link"/>
+        <child link="left_lower_arm_link"/>
+        <origin xyz="0 0.019 -0.0586" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+     <!--sensor ultrasonic-->
+
+  
+
+    <!--touch-->
+    <joint name="sensor_touch_head" type="continuous" >
+        <parent link="face_link"/>
+        <origin xyz="0.10 0 0.16" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+    <joint name="sensor_touch_chest" type="continuous" >
+        <parent link="center_link"/>
+        <origin xyz="0.1 0 0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint> 
+    <joint name="sensor_touch_right_hand" type="continuous" >
+        <parent link="right_hand_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+    <joint name="sensor_touch_left_hand" type="continuous" >
+        <parent link="left_hand_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+   
+    <!--led-->
+    <joint name="led_head" type="continuous" >
+        <parent link="face_link"/>
+        <child link="led_head_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+    <joint name="led_chest" type="continuous" >
+        <parent link="footprint_link"/>
+        <child link="led_chest_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+    <joint name="led_right_hand" type="continuous">   
+        <parent link="right_lower_arm_link"/>
+        <child link="led_right_hand_link"/>  
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <joint name="led_left_hand" type="continuous">   
+        <parent link="left_lower_arm_link"/>
+        <child link="led_left_hand_link"/>  
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <!--sensor camera-->
+    <joint name="sensor_camera" type="continuous" >
+        <parent link="face_screen_link"/>
+        <origin xyz="0 0 0.056" rpy="0 0.2502803 0"/>
+        <axis xyz="0 1 0"/>
+    </joint> 
+
+    <!--<joint name="platform" type="continuous" >        
+        <parent link="footprint_link"/>
+        <child link="platform_link"/>
+        <origin xyz="0 0 0.04" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>-->
+    <joint name="footprint" type="continuous" >        
+        <parent link="base_link"/>
+        <child link="footprint_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <joint name="footprint2" type="continuous" >        
+        <parent link="footprint_link"/>
+        <child link="footprint2_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <joint name="footprint3" type="continuous" >        
+        <parent link="footprint2_link"/>
+        <child link="footprint3_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="mibo_center" type="continuous" >        
+        <parent link="footprint_link"/>
+        <child link="center_link"/>
+        <origin xyz="0 0 0.13505" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <!--<joint name="ball_center" type="continuous" >        
+        <parent link="footprint_link"/>
+        <child link="center_link"/>
+        <origin xyz="0 0 0.094" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>-->
+
+    <joint name="center_left" type="continuous">  
+        <parent link="center_link"/>
+        <child link="left_clavicle_link"/>  
+        <origin xyz="0.04232 0.05139 0.0" rpy="0 0.20943951 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <joint name="center_right" type="continuous">  
+        <parent link="center_link"/>
+        <child link="right_clavicle_link"/>  
+        <origin xyz="0.04232 -0.05139 0.0" rpy="0 0.20943951 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <joint name="center_neck" type="continuous">  
+        <parent link="center_link"/>
+        <child link="neck_y_link"/>  
+        <origin xyz="-0.01557352504 0 0.03738703284" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+
+    <joint name="left_end" type="continuous">    
+        <parent link="left_lower_arm_link"/>
+        <child link="left_hand_link"/> 
+        <origin xyz="0 0 -0.061" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <joint name="right_end" type="continuous">   
+        <parent link="right_lower_arm_link"/>
+        <child link="right_hand_link"/>  
+        <origin xyz="0 0 -0.061" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="face_end" type="continuous" >        
+        <parent link="face_link"/> 
+        <child link="face_screen_link"/> 
+        <origin xyz="0.111 0 0.092" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+
+   <!-- base link -->
+    <link name="base_link"> 
+    </link>
+    <link name="footprint_link"> 
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_body_1.stlx"/>
+            </geometry>
+        </visual>
+    </link> 
+    <link name="footprint2_link"> 
+         <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_body_2.stlx"/>
+            </geometry>
+            <material name="Black">
+                <color rgba="0.022 0.022 0.022 1.0"/>
+            </material>
+        </visual>
+    </link> 
+    <link name="footprint3_link"> 
+         <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_body_3.stlx"/>
+            </geometry>
+        </visual>
+    </link> 
+    <link name="center_link">  
+       
+        <!--<inertial>
+            <origin xyz="0 0 0.2" rpy="0 0 0"/>
+            <mass value="0"/>
+            <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+        </inertial>
+         <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_body.stl"/>
+            </geometry>
+        </visual>-->
+    </link>
+    <!-- left link -->
+    <link name="left_clavicle_link">
+    </link>
+    <link name="left_shoulder_scapula_link">
+        <inertial>
+            <origin xyz="-0.01019 0.08068 0" rpy="0 0 0"/>
+            <mass value="0.0"/>
+            <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_l_shoulder.stlx"/>
+            </geometry>
+        </visual>
+    </link>
+    <link name="left_shoulder_link" >
+         <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_l_shoulder_y.stlx"/>
+            </geometry>
+            <material name="Black">
+                <color rgba="0.022 0.022 0.022 1.0"/>
+            </material>
+        </visual>
+
+    </link>
+    <link name="left_upper_arm_link" >
+        <inertial>
+            <origin xyz="0 0 -0.05689" rpy="0 0 0"/>
+            <mass value="0.0"/>
+            <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_l_upper_arm.stlx"/>
+            </geometry>
+
+        </visual>
+    </link>
+    <link name="left_upper_arm2_link" >
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_l_upper_arm2.stlx"/>
+            </geometry>
+            <material name="Black">
+                <color rgba="0.022 0.022 0.022 1.0"/>
+            </material>
+        </visual>
+    </link>
+    <link name="left_lower_arm_link" >
+        <inertial>
+            <origin xyz="0 0 -0.05888" rpy="0 0 0"/>
+            <mass value="0.0"/>
+            <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_l_lower_arm.stl"/>
+            </geometry>
+        </visual>
+    </link>
+    <!-- right link -->
+    <link name="right_clavicle_link" >
+    </link>
+    <link name="right_shoulder_scapula_link" >
+        <inertial>
+            <origin xyz="-0.01019 -0.08068 0" rpy="0 0 0"/>
+            <mass value="0.0"/>
+            <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_r_shoulder.stlx"/>
+            </geometry>
+        </visual>
+    </link>
+    <link name="right_shoulder_link" >
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_r_shoulder_y.stlx"/>
+            </geometry>
+            <material name="Black">
+                <color rgba="0.022 0.022 0.022 1.0"/>
+            </material>
+        </visual>
+    </link>
+    <link name="right_upper_arm_link" >
+        <inertial>
+            <origin xyz="0 0 -0.05689" rpy="0 0 0"/>
+            <mass value="0.0"/>
+            <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_r_upper_arm.stlx"/>
+            </geometry>
+        </visual>
+    </link>
+    <link name="right_upper_arm2_link" >
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_r_upper_arm2.stlx"/>
+            </geometry>
+            <material name="Black">
+                <color rgba="0.022 0.022 0.022 1.0"/>
+            </material>
+        </visual>
+    </link>
+    <link name="right_lower_arm_link" >
+        <inertial>
+            <origin xyz="0 0 -0.05888" rpy="0 0 0"/>
+            <mass value="0.0"/>
+            <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_r_lower_arm.stl"/>
+            </geometry>
+        </visual>
+    </link>
+    <!-- head link -->
+    <link name="neck_z_link" >
+    </link>
+
+    <link name="neck_y_link" >
+    </link>
+    <link name="face_link" >
+        <inertial>
+            <origin xyz="0.01286 -0.00011 0.00116" rpy="0 0 0"/>
+            <mass value="0.0"/>
+            <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+        </inertial>
+        <!--visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_head.stl"/>
+            </geometry>
+        </visual-->
+    </link>
+
+     <link name="head1_link" > 
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_head_1.stlx"/>
+            </geometry>
+        </visual>
+    </link>
+    <link name="head2_link" > 
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_head_2.stlx"/>
+            </geometry>
+            <material name="Black">
+                <color rgba="0.022 0.022 0.022 1.0"/>
+            </material>
+        </visual>
+    </link>
+    <link name="head3_link" > 
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_head_3.stlx"/>
+            </geometry>
+            <material name="Black">
+                <color rgba="0.022 0.022 0.022 1.0"/>
+            </material>
+        </visual>
+    </link>
+    <link name="head4_link" > 
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_head_4.stlx"/>
+            </geometry>
+             <material name="Black">
+                <color rgba="0.022 0.022 0.022 1.0"/>
+            </material>
+        </visual>
+    </link>
+
+
+
+   
+    <link name="right_hand_link">
+    </link>
+    <link name="left_hand_link">
+    </link>
+    <link name="face_screen_link">
+    </link>
+
+
+    <link name="led_head_link">
+         <visual>
+            <origin rpy="0 0 0" xyz="0.0008 0 0.0005"/>
+            <geometry>
+                <mesh filename="mesh/mibo_led_head.stl"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <link name="led_chest_link">
+         <visual>
+            <origin rpy="0 0 0" xyz="0.0005 0 0"/>
+            <geometry>
+                <mesh filename="mesh/mibo_chest_led.stl"/>
+            </geometry>
+        </visual>
+    </link>
+    <link name="led_left_hand_link">
+         <visual>
+            <origin rpy="0 0 0" xyz="0 0 -0.0005"/>
+            <geometry>
+                <mesh filename="mesh/mibo_l_lower_arm_led.stl"/>
+            </geometry>
+        </visual>
+    </link>
+    <link name="led_right_hand_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 -0.0005"/>
+            <geometry>
+                <mesh filename="mesh/mibo_r_lower_arm_led.stl"/>
+            </geometry>
+        </visual>
+    </link>
+    <link name="sensor_touch_right_hand_link">
+    </link>
+    <link name="sensor_touch_left_hand_link">
+    </link>
+    <link name="sensor_touch_head_link">
+    </link>
+    <link name="sensor_touch_chest_link">
+    </link>
+ 
+
+
+</robot>
