@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>複製-凱比動作播放網頁平台</title>
+    <title>ROBOT</title>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
     <script src="../js/plugins/cryptojs/aes.js"></script>
     <script src="../js/plugins/cryptojs/mode-ecb-min.js"></script>
@@ -51,52 +51,49 @@
       const API_TYPE = "motion";
       const API_TOKEN =
         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FwaS5udXdhcm9ib3RpY3MuY29tIiwic3ViIjoiYXV0aC5udXdhcm9ib3RpY3N8MTgyMDc3MDI3NTM0IiwiYXVkIjoiMzEyNzAxNDYtNzE3Qi00RUYwLTg2NDctRjNBQkQ3M0E4NjMwIiwiaWF0IjoxNzU5NDYxNzkzLCJleHAiOjM1MTg5MjQxODYsImp0aSI6IjM3YTI2Yjg5LThhYjctNDhlZi04YTczLTMyMDlkMWU1MDM0OCIsImNvbnRleHQiOnsidHlwZSI6ImFjY2VzcyIsInByb3ZpZGVyIjoiZGV2ZWxvcGVyfG8yMDM5Mm9AZ21haWwuY29tIn0sInNjb3BlIjoicHJvZmlsZSBhdXRoIGF1dGhfcmVmcmVzaC5nZXQgb3RhIG90YS5nZXQgZGV2ZWxvcGVyIn0.ILbJYRCwhiR_EhzUTtGWrBPUc9SK8_vTARlcYP0aqIjDVIVw5-1ZliuPxFWVtl96Z7uD32RutGFhbvvd9crou_MIu10Cd708phQlLU6FlAB99111hnJjBnPzGcIU-9s7AJyYd4F388ZmvtqdVNy-PJuv1Eeoec-NRx9hVDW0JuCuQ4EsHXPdv2czpmf41eaZCPZdu312O1V6Fyage27sj_HMsWkSnQ8yy_vYc3c-4AaMPr-3xkl74_GCL7MuMOAfzmQvTlZmmWisShHaISTGgWhbHYqAkPyQDMAYLDAUA7XgvrZAPUnjWhK4Vb5GD1r1mOZhKWPnjuduCcNAbr_UIg";
-      
+
       window.onload = function () {
-          //var select2 = document.getElementById('select2').value;
-          //motion_load(xrobot_nuwa + '/assets/motion/' + select2 + '.xml');
-          try {
-            if (Detector.webgl) {
-              if (getQueryStringValue("name")) {
-                motion_change(getQueryStringValue("name"));
-              } else {
-                motion_change();
-              }
-              xrobot_init();
-
-              texture_init();
-              three_init();
-
-              video_display(false);
-              document.getElementById("nowPlaying").className = "";
+        //var select2 = document.getElementById('select2').value;
+        //motion_load(xrobot_nuwa + '/assets/motion/' + select2 + '.xml');
+        try {
+          if (Detector.webgl) {
+            if (getQueryStringValue("name")) {
+              motion_change(getQueryStringValue("name"));
             } else {
-              var warning = Detector.getWebGLErrorMessage();
-              document.getElementById("robotContainer").appendChild(warning);
+              motion_change();
             }
+            xrobot_init();
 
-            // Without JQuery
-            var slider = new Slider("#ex1", {
-              formatter: function (value) {
-                return "Current value: " + value;
-              },
-            });
-            slider.on("slideStop", function (value) {
-              var name = document.getElementById("select1").value;
-              input_rotate2(name, value);
-            });
-          } catch (error) {
-            if (
-              error.message === "Cannot read property 'getExtension' of null"
-            ) {
-              document.getElementById("nowPlaying").innerHTML =
-                "Error creating WebGL context.";
-            } else {
-              document.getElementById("nowPlaying").innerHTML =
-                "Error: " + error;
-            }
-            document.getElementById("nowPlaying").className = "red";
+            texture_init();
+            three_init();
+
+            video_display(false);
+            document.getElementById("nowPlaying").className = "";
+          } else {
+            var warning = Detector.getWebGLErrorMessage();
+            document.getElementById("robotContainer").appendChild(warning);
           }
-        };
+
+          // Without JQuery
+          var slider = new Slider("#ex1", {
+            formatter: function (value) {
+              return "Current value: " + value;
+            },
+          });
+          slider.on("slideStop", function (value) {
+            var name = document.getElementById("select1").value;
+            input_rotate2(name, value);
+          });
+        } catch (error) {
+          if (error.message === "Cannot read property 'getExtension' of null") {
+            document.getElementById("nowPlaying").innerHTML =
+              "Error creating WebGL context.";
+          } else {
+            document.getElementById("nowPlaying").innerHTML = "Error: " + error;
+          }
+          document.getElementById("nowPlaying").className = "red";
+        }
+      };
       var scheme = "http";
       var env = window.location.hostname.split(".")[0];
       var port = env === "localhost" ? "6700" : "80";
@@ -199,7 +196,7 @@
       }
       function motion_change(value) {
         var select2 =
-          value || document.getElementById("select2").value + ".xml";
+          value || document.getElementById("select2").value;
         motion_stop();
 
         // JSON 檔案儲存在相對於 robot.html 的 ./motions/ 資料夾下的 xml檔案中
@@ -227,6 +224,244 @@
           )
         );
       }
+    </script>
+
+    <script name="load_motion">
+      document.addEventListener("DOMContentLoaded", function () {
+        var motionFiles = [
+          "666_PE_OperaFaceB.xml",
+          "666_PE_OperaFace.xml",
+          "666_SP_QSwim.xml",
+          "666_WO_SweepFloor.xml",
+          "666_WO_Saw.xml",
+          "666_WO_HitKeyboard.xml",
+          "666_WO_Drive.xml",
+          "666_TA_YoR.xml",
+          "666_WO_Handling.xml",
+          "666_TA_YoL.xml",
+          "666_TA_Yell.xml",
+          "666_TA_TalkS.xml",
+          "666_TA_TalkRL.xml",
+          "666_TA_TalkR.xml",
+          "666_TA_TalkL.xml",
+          "666_TA_LookLR.xml",
+          "666_TA_LookDnU.xml",
+          "666_TA_Fault.xml",
+          "666_TA_DrawCircle.xml",
+          "666_FI_Defense.xml",
+          "666_SP_Shot.xml",
+          "666_EM_Shameless.xml",
+          "666_BA_RHandS03.xml",
+          "666_EM_Sad01.xml",
+          "666_BA_LookU023.xml",
+          "666_EM_IntimidateA.xml",
+          "666_EM_Happy03.xml",
+          "666_EM_Mad01.xml",
+          "666_EM_Perverse.xml",
+          "666_PE_PushGlasses.xml",
+          "666_RE_KnockDoor.xml",
+          "666_BA_LookR036.xml",
+          "666_FI_Surrender.xml",
+          "666_EM_Disgusted02.xml",
+          "666_BA_LookD023.xml",
+          "666_SP_Gymnastics.xml",
+          "666_EM_Sad02.xml",
+          "666_PE_PlayGuitar.xml",
+          "666_PE_Power.xml",
+          "666_SA_DiscoverR.xml",
+          "666_EM_Laugh.xml",
+          "666_RE_Welcome.xml",
+          "666_DA_WBPetted.xml",
+          "666_EM_IntimidateB.xml",
+          "666_BA_RzArmR45.xml",
+          "666_RE_Embrace.xml",
+          "666_DA_Tidy.xml",
+          "666_PE_Ultraman.xml",
+          "666_DA_Take.xml",
+          "666_LE_Fishing.xml",
+          "666_DA_MakeUp.xml",
+          "666_DA_Listen.xml",
+          "666_DA_Give.xml",
+          "666_DA_LookFor.xml",
+          "666_WO_Watering.xml",
+          "666_RE_Bye.xml",
+          "666_TA_LookUnD.xml",
+          "666_SA_Getit.xml",
+          "666_DA_Scratching.xml",
+          "666_RE_Prayer.xml",
+          "666_DA_Press.xml",
+          "666_RE_Bow.xml",
+          "666_RE_Hello.xml",
+          "666_DA_Excrement.xml",
+          "666_DA_Eat.xml",
+          "666_BA_Patrol.xml",
+          "666_DA_Washhair.xml",
+          "666_BA_TurnL180.xml",
+          "666_TA_Roar.xml",
+          "666_BA_RHandS01.xml",
+          "666_EM_Happy02.xml",
+          "666_SP_Chest.xml",
+          "666_BA_RHandR02.xml",
+          "666_BA_LookL036.xml",
+          "666_WO_Cook.xml",
+          "666_IM_PenguinWalk.xml",
+          "666_EM_Fear01.xml",
+          "666_BA_RHandL02.xml",
+          "666_FI_Draw.xml",
+          "666_BA_RElbowS.xml",
+          "666_BA_RHandL01.xml",
+          "666_EM_Disgusted01.xml",
+          "666_BA_TurnL360.xml",
+          "666_PE_PGuitar.xml",
+          "666_DA_Phone.xml",
+          "666_PE_Shrink.xml",
+          "666_BA_RHandR01.xml",
+          "666_BA_Shakehead.xml",
+          "666_IM_Gorilla.xml",
+          "666_BA_RHandL03.xml",
+          "666_BA_LookL023.xml",
+          "666_BA_RArmR90.xml",
+          "666_PE_Dance.xml",
+          "666_BA_TurnR270.xml",
+          "666_BA_LookD038.xml",
+          "666_PE_Killed.xml",
+          "666_DA_Think.xml",
+          "666_BA_TurnR360.xml",
+          "666_BA_LookR023.xml",
+          "666_BA_RHandR03.xml",
+          "666_BA_LookU036.xml",
+          "666_BA_RElbowR.xml",
+          "666_BA_RzArmL90.xml",
+          "666_SP_Rope.xml",
+          "666_BA_RzArmS45.xml",
+          "666_BA_RHandS02.xml",
+          "666_BA_RzArmS90.xml",
+          "666_TA_LookRL.xml",
+          "666_SA_Think.xml",
+          "666_EM_Sad03.xml",
+          "666_DA_Applaud.xml",
+          "666_DA_Splash.xml",
+          "666_PE_Dance02.xml",
+          "666_DA_Sleep.xml",
+          "666_BA_TurnL90.xml",
+          "666_BA_TurnL270.xml",
+          "666_BA_RArmS90.xml",
+          "666_EM_Happy01.xml",
+          "666_BA_RzArmL45.xml",
+          "666_EM_Fear02.xml",
+          "666_BA_TurnR90.xml",
+          "666_RE_OpenDoor.xml",
+          "666_DA_SearchF.xml",
+          "666_SP_Boat.xml",
+          "666_DA_Washface.xml",
+          "666_DA_Bathe.xml",
+          "666_PE_Wave.xml",
+          "666_BA_TurnR180.xml",
+          "666_FI_Dodge.xml",
+          "666_DA_Wear.xml",
+          "666_DA_PushSlowly.xml",
+          "666_FI_Whistle.xml",
+          "666_PE_Curse.xml",
+          "666_DA_PushFast.xml",
+          "666_PE_DJ.xml",
+          "666_DA_Catch.xml",
+          "666_DA_PickUp.xml",
+          "666_SP_Swim.xml",
+          "666_TA_TalkY.xml",
+          "666_PE_Titanic.xml",
+          "666_DA_Drink.xml",
+          "666_FI_Fight.xml",
+          "666_FI_Scare.xml",
+          "666_BA_RArmL90.xml",
+          "666_IM_Bird.xml",
+          "666_BA_RElbowL.xml",
+          "666_IM_Mario.xml",
+          "666_IM_Rooster.xml",
+          "666_SP_Tennis.xml",
+          "666_BA_RzArmR90.xml",
+          "666_IM_Train.xml",
+          "666_DA_Intospace.xml",
+          "666_SA_Sneeze.xml",
+          "666_WO_WipeTable.xml",
+          "666_LE_ListenSong.xml",
+          "666_PE_Hadouken.xml",
+          "666_EM_Curse.xml",
+          "666_LE_Mahjong.xml",
+          "666_SP_Dribble.xml",
+          "666_EM_Disdain.xml",
+          "666_PE_Abuse.xml",
+          "666_PE_AirGun.xml",
+          "666_EM_Disgusted03.xml",
+          "666_SP_Run.xml",
+          "666_EM_Fear03.xml",
+          "666_PE_Drums.xml",
+          "666_PE_Gun.xml",
+          "666_PE_Harmonica.xml",
+          "666_PE_Hercules.xml",
+          "666_PE_Hug.xml",
+          "666_PE_Kill.xml",
+          "666_LE_Read.xml",
+          "666_PE_Kiss.xml",
+          "666_PE_NijaRun.xml",
+          "666_PE_Pikachu.xml",
+          "666_PE_PlayCello.xml",
+          "666_PE_Puff.xml",
+          "666_EM_Blush.xml",
+          "666_PE_RotateB.xml",
+          "666_PE_RotateC.xml",
+          "666_PE_ShakeFart.xml",
+          "666_SP_RaceWalk.xml",
+          "666_SP_Throw.xml",
+          "666_LE_Yoyo.xml",
+          "666_PE_Singing.xml",
+          "666_PE_Sneak.xml",
+          "666_PE_Sorcery.xml",
+          "666_PE_Triangel.xml",
+          "666_RE_Ask.xml",
+          "666_SP_Cheer.xml",
+          "666_RE_Baoquan.xml",
+          "666_PE_Phubbing.xml",
+          "666_RE_Change.xml",
+          "666_PE_Brewing.xml",
+          "666_RE_Request.xml",
+          "666_RE_Encourage.xml",
+          "666_DA_Brushteeth.xml",
+          "666_RE_HiL.xml",
+          "666_RE_HiR.xml",
+          "666_WO_Traffic.xml",
+          "666_SP_HorizontalBar.xml",
+          "666_PE_Changing.xml",
+          "666_RE_Thanks.xml",
+          "666_SA_Discover.xml",
+          "666_SP_Dumbbell.xml",
+          "666_SA_Shocked.xml",
+          "666_SA_Sick.xml",
+          "666_SA_Toothache.xml",
+          "666_BA_TurnHead.xml",
+          "666_SA_Find.xml",
+          "666_SP_Walk.xml",
+          "666_SP_Bowling.xml",
+          "666_TA_DictateR.xml",
+          "666_DA_Hit.xml",
+          "666_SP_Climb.xml",
+          "666_RE_Cheer.xml",
+          "666_SP_Karate.xml",
+          "666_PE_RotateA.xml",
+          "666_SP_Swim02.xml",
+          "666_BA_Nodhead.xml",
+          "666_EM_Mad02.xml",
+          "666_DA_Full.xml",
+          "666_TA_DictateL.xml",
+        ];
+        var selectElement = document.getElementById("select2");
+        selectElement.innerHTML = ""; // Clear existing options
+        motionFiles.forEach(function (fileName) {
+          var option = document.createElement("option");
+          option.value = fileName;
+          option.textContent = fileName;
+          selectElement.appendChild(option);
+        });
+      });
     </script>
   </head>
 
@@ -283,7 +518,6 @@
                       name="select2"
                       id="select2"
                       onchange="motion_change()"
-                      hidden="true"
                     >
                       <option value="666_SP_Karate">666_SP_Karate</option>
                     </select>
