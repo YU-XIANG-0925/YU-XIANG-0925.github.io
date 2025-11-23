@@ -64,10 +64,8 @@
             }
             xrobot_init();
 
-            texture_init();
             three_init();
 
-            video_display(false);
             document.getElementById("nowPlaying").className = "";
           } else {
             var warning = Detector.getWebGLErrorMessage();
@@ -108,92 +106,12 @@
       } else {
         env = env.replace("dss", "api");
       }
-      // var basicToken = "";
-      var video1;
-      var videocanvas;
-      var videocanvasctx;
-      var videotexture;
-      var videomaterial;
-      var video_width = 640;
-      var video_height = 480;
-      function texture_init() {
-        video_width = 640;
-        video_height = 640;
-        video_width = 512;
-        video_height = 512;
-        video1 = document.getElementById("video1");
-        videocanvas = document.createElement("canvas");
-        videocanvasctx = videocanvas.getContext("2d");
-        videocanvas.width = video_width; //640;
-        videocanvas.height = video_height; //480;
-        videocanvasctx.fillStyle = "#000000";
-        videocanvasctx.fillRect(0, 0, video_width, video_height); //640,480);
-        videotexture = new THREE.Texture(videocanvas);
-        videomaterial = new THREE.MeshBasicMaterial({
-          map: videotexture,
-          overdraw: 0.5,
-        });
-      }
-      function texture_update() {
-        if (video1.readyState === video1.HAVE_ENOUGH_DATA) {
-          //draw video to canvas starting from upper left corner
-          draw_image_rotate(); //videocanvasctx.drawImage(video1, 0, 0);
-          //tell texture object it needs to be updated
-          videotexture.needsUpdate = true;
-        }
-      }
-      function draw_image_rotate() {
-        var angle = -Math.PI / 2;
-        var x = videocanvas.width / 2;
-        var y = videocanvas.height / 2;
-        var width = video_width; //640;
-        var height = video_height; //480;
-        videocanvasctx.translate(x, y);
-        videocanvasctx.rotate(angle);
-        videocanvasctx.drawImage(
-          video1,
-          -width / 2,
-          -height / 2,
-          width,
-          height
-        );
-        videocanvasctx.rotate(-angle);
-        videocanvasctx.translate(-x, -y);
-      }
-      //
+
       function rotate() {
         var name = document.getElementById("select1").value;
         input_rotate(name);
       }
-      function video_load(url) {
-        var e = document.getElementById("video1");
-        // url =
-        //   scheme + "://" + env + ":" + port + "/v1/developer/download" + url;
-        // if (basicToken) {
-        //   url += "?token=" + basicToken;
-        // }
-        console, log("嘗試載入本地影片: ", url);
-        e.src = url;
-        e.crossOrigin = "";
-      }
-      function video_start(url) {
-        var e = document.getElementById("video1");
-        //e.controls = true;
-        e.play();
-      }
-      function video_stop() {
-        var e = document.getElementById("video1");
-        e.controls = false;
-        e.pause();
-      }
-      function video_display(enable) {
-        //console.log('video_display', enable);
-        video1.style.display = enable ? "block" : "none";
-      }
-      function video_show() {
-        var enable = video1.style.display == "none";
-        video_display(enable);
-      }
+
       function motion_change(value) {
         var select2 =
           value || document.getElementById("select2").value;
@@ -499,11 +417,7 @@
                         />
                       </div>
                     </div>
-                    <div class="col-md-3">
-                      <div class="input-group">
-                        <button onclick="video_show()">show video</button>
-                      </div>
-                    </div>
+
                     <div class="col-md-3">
                       <div class="input-group">
                         <button onclick="motion_start_stop()">
@@ -534,6 +448,5 @@
       </div>
     </div>
 
-    <video id="video1" width="256" height="144"></video>
   </body>
 </html>

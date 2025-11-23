@@ -143,7 +143,6 @@ var wy =
   document.body.clientHeight;
 console.log("window=" + wx + "x" + wy);
 function xrobot_run2() {
-  texture_update();
   var matrix = new THREE.Matrix4().makeRotationX(-Math.PI / 2);
   if (wx > wy)
     matrix = matrix.multiply(

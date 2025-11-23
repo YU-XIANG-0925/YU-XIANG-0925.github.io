@@ -1,0 +1,69 @@
+<motion name="Custom_Swim_Stroke" loop="false" startFrame="0" endFrame="48" fps="24.0">
+   <motorTimeline id="0" startDelay="0.0" startFrame="0" endFrame="48" fps="24.0">
+      
+      <bezierLayer tag="neck_z" id="0" color="-65536">
+         <BezierKey frame="0.0" value="0.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="12.0" value="-30.0" in="AUTO" out="AUTO"/> <BezierKey frame="24.0" value="0.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="36.0" value="30.0" in="AUTO" out="AUTO"/>  <BezierKey frame="48.0" value="0.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+      <bezierLayer tag="neck_y" id="0" color="-12829441">
+         <BezierKey frame="0.0" value="0.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="12.0" value="-4.0" in="AUTO" out="AUTO"/> <BezierKey frame="24.0" value="0.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="36.0" value="-4.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="48.0" value="0.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+
+      <bezierLayer tag="right_shoulder_z" id="0" color="-10223516">
+         <BezierKey frame="0.0" value="3.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="48.0" value="3.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+      <bezierLayer tag="right_shoulder_y" id="0" color="-4980481">
+         <BezierKey frame="0.0" value="8.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="12.0" value="8.0" in="AUTO" out="AUTO"/>  <BezierKey frame="24.0" value="8.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="36.0" value="-141.13" in="AUTO" out="AUTO"/> <BezierKey frame="48.0" value="8.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+      <bezierLayer tag="right_shoulder_x" id="0" color="-4915456">
+         <BezierKey frame="0.0" value="5.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="48.0" value="5.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+      <bezierLayer tag="right_elbow_y" id="0" color="-8519811">
+         <BezierKey frame="0.0" value="-15.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="12.0" value="-80.0" in="AUTO" out="AUTO"/> <BezierKey frame="24.0" value="-15.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="36.0" value="-32.72" in="AUTO" out="AUTO"/> <BezierKey frame="48.0" value="-15.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+
+      <bezierLayer tag="left_shoulder_z" id="0" color="-39936">
+         <BezierKey frame="0.0" value="3.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="48.0" value="3.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+      <bezierLayer tag="left_shoulder_y" id="0" color="-10210716">
+         <BezierKey frame="0.0" value="8.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="12.0" value="-141.13165" in="AUTO" out="AUTO"/> <BezierKey frame="24.0" value="8.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="36.0" value="8.0" in="AUTO" out="AUTO"/>  <BezierKey frame="48.0" value="8.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+      <bezierLayer tag="left_shoulder_x" id="0" color="-10197966">
+         <BezierKey frame="0.0" value="5.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="48.0" value="5.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+      <bezierLayer tag="left_elbow_y" id="0" color="-10223361">
+         <BezierKey frame="0.0" value="-15.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="12.0" value="-32.721153" in="AUTO" out="AUTO"/> <BezierKey frame="24.0" value="-15.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="36.0" value="-80.0" in="AUTO" out="AUTO"/> <BezierKey frame="48.0" value="-15.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+   </motorTimeline>
+
+   <platformTimeline id="0" startDelay="0.0" startFrame="0" endFrame="48" fps="24.0">
+      <bezierLayer tag="platform_y" id="0" color="-10223516">
+         <BezierKey frame="0.0" value="0.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="48.0" value="0.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+      <bezierLayer tag="platform_x" id="0" color="-10223516">
+         <BezierKey frame="0.0" value="0.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="48.0" value="0.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+      <bezierLayer tag="platform_theta" id="0" color="-10223516">
+         <BezierKey frame="0.0" value="0.0" in="AUTO" out="AUTO"/>
+         <BezierKey frame="48.0" value="0.0" in="AUTO" out="AUTO"/>
+      </bezierLayer>
+   </platformTimeline>
+</motion>

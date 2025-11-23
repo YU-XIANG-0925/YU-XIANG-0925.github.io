@@ -16,7 +16,6 @@ function motion_start() {
     var path = motion.media_path;
     path = path.replace("/assets", "");
     // video_start(xrobot_nuwa + motion.media_path);
-    video_start(path);
   }
 }
 function motion_stop() {
@@ -26,7 +25,6 @@ function motion_stop() {
   motion_start_t = 0;
   fps_show(0);
   //
-  video_stop();
   //
 }
 function fps_show(fps) {
@@ -131,44 +129,16 @@ function motor_poll(name, time) {
 //   http.send(null);
 // }
 function motion_load(url) {
-  // url 現在是本地相對路徑
+  // url 現在是本地相對路徑，預期為 XML 檔案
   var http = new XMLHttpRequest();
   http.onreadystatechange = function () {
     if (http.readyState == 4) {
       if (http.status == 200) {
         try {
-          // 使用 API_TOKEN 計算金鑰
-          if (typeof API_TOKEN === "undefined" || !API_TOKEN) {
-            throw new Error(
-              "API_TOKEN 未定義或為空，無法解密。請在 robot.html 中定義 API_TOKEN。"
-            );
-          }
-          var hash = CryptoJS.MD5(API_TOKEN);
-          var hexKey = hash.toString(CryptoJS.enc.Hex).toUpperCase();
-          var secretKey = CryptoJS.enc.Utf8.parse(hexKey);
-          // 金鑰計算結束
-
-          var responseText = http.responseText;
-          var jsonData = JSON.parse(responseText);
-          var base64Data = jsonData.data;
-          if (!base64Data) {
-            throw new Error("檔案內容缺少 'data' 欄位。");
-          }
-          var encryptedWordArray = CryptoJS.enc.Base64.parse(base64Data);
-          var decryptedWordArray = CryptoJS.AES.decrypt(
-            { ciphertext: encryptedWordArray },
-            secretKey,
-            {
-              mode: CryptoJS.mode.ECB,
-              padding: CryptoJS.pad.Pkcs7,
-            }
-          );
-          var xmlString = decryptedWordArray.toString(CryptoJS.enc.Utf8);
+          var xmlString = http.responseText;
 
           if (!xmlString) {
-            throw new Error(
-              "解密失敗或結果為空字串。請檢查 API_TOKEN 是否正確且未過期？"
-            );
+            throw new Error("檔案內容為空。");
           }
 
           var parser = new DOMParser();
@@ -178,18 +148,17 @@ function motion_load(url) {
             var parseError =
               xmlDoc.getElementsByTagName("parsererror")[0].textContent;
             console.error("解析 XML 時出錯:", parseError);
-            throw new Error("解密後的字串無法被解析為有效的 XML。");
+            throw new Error("檔案內容不是有效的 XML。");
           }
 
           var obj = {};
           parse_motion(obj, xmlDoc.documentElement);
-          console.log("motion (本地解密)", obj);
+          console.log("motion (XML loaded)", obj);
           motion = obj;
 
           if (motion && motion.media_path) {
             var path = motion.media_path;
             path = path.replace("/assets", "");
-            video_load(path);
           }
         } catch (error) {
           console.error("處理動作檔案時發生錯誤:", error);

@@ -309,7 +309,7 @@ function add_face() {
     opacity: 0.9,
   });
   //var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-  var plane = new THREE.Mesh(planeGeometry, videomaterial);
+  var plane = new THREE.Mesh(planeGeometry, planeMaterial);
   //
   scene.add(plane);
   //
