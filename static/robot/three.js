@@ -25,10 +25,11 @@ function three_init() {
   render();
 }
 function camera_init() {
+  var container = document.getElementById("canvas-container");
   //camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera = new THREE.PerspectiveCamera(
     25,
-    window.innerWidth / window.innerHeight,
+    container.clientWidth / container.clientHeight,
     0.1,
     1000
   );
@@ -40,16 +41,18 @@ function camera_init() {
   //
 }
 function camera_resize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  var container = document.getElementById("canvas-container");
+  camera.aspect = container.clientWidth / container.clientHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(container.clientWidth, container.clientHeight);
 }
 function render_init() {
   renderer = new THREE.WebGLRenderer();
   renderer.setClearColor(0x000000, 1.0);
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  var container = document.getElementById("canvas-container");
+  renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.shadowMapEnabled = true;
-  document.body.appendChild(renderer.domElement);
+  container.appendChild(renderer.domElement);
 }
 function render() {
   var rotSpeed = 0.0; //control.rotationSpeed;
