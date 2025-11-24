@@ -492,10 +492,8 @@
 
           if (sliderEl) {
             if (joint.name === 'rotate') {
-                sliderEl.addEventListener("input", function () { // Update label in real-time
+                sliderEl.addEventListener("input", function () { // Update label and trigger function in real-time
                     valueLabel.textContent = this.value;
-                });
-                sliderEl.addEventListener("change", function () { // Trigger function on change
                     const name = document.getElementById("select1").value;
                     input_rotate2(name, parseFloat(this.value));
                 });
