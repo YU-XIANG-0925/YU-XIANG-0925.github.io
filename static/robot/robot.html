@@ -72,16 +72,7 @@
             document.getElementById("robotContainer").appendChild(warning);
           }
 
-          // Without JQuery
-          var slider = new Slider("#ex1", {
-            formatter: function (value) {
-              return "Current value: " + value;
-            },
-          });
-          slider.on("slideStop", function (value) {
-            var name = document.getElementById("select1").value;
-            input_rotate2(name, value);
-          });
+
         } catch (error) {
           if (error.message === "Cannot read property 'getExtension' of null") {
             document.getElementById("nowPlaying").innerHTML =
@@ -107,14 +98,10 @@
         env = env.replace("dss", "api");
       }
 
-      function rotate() {
-        var name = document.getElementById("select1").value;
-        input_rotate(name);
-      }
+
 
       function motion_change(value) {
-        var select2 =
-          value || document.getElementById("select2").value;
+        var select2 = value || document.getElementById("select2").value;
         motion_stop();
 
         // JSON 檔案儲存在相對於 robot.html 的 ./motions/ 資料夾下的 xml檔案中
@@ -381,24 +368,83 @@
         });
       });
     </script>
+    <script>
+      const joints = [
+        { name: "rotate", label: "Rotate", type: "range", min: 0, max: 30, value: 0 },
+        { name: "neck_z", label: "頭部水平", type: "range", min: -30, max: 30, value: 0 },
+        { name: "neck_y", label: "頭部垂直", type: "range", min: -20, max: 20, value: 0 },
+        {
+          name: "right_shoulder_z",
+          label: "右肩內轉",
+          type: "range",
+          min: 0,
+          max: 90,
+          value: 0,
+        },
+        {
+          name: "right_shoulder_y",
+          label: "右肩上抬",
+          type: "range",
+          min: -55,
+          max: 200,
+          value: 0,
+        },
+        {
+          name: "right_shoulder_x",
+          label: "右手臂側抬",
+          type: "range",
+          min: 0,
+          max: 90,
+          value: 0,
+        },
+        {
+          name: "right_elbow_y",
+          label: "右手肘上抬",
+          type: "range",
+          min: 0,
+          max: 75,
+          value: 0,
+        },
+        {
+          name: "left_shoulder_z",
+          label: "左肩內轉",
+          type: "range",
+          min: 0,
+          max: 90,
+          value: 0,
+        },
+        {
+          name: "left_shoulder_y",
+          label: "左肩上抬",
+          type: "range",
+          min: -55,
+          max: 200,
+          value: 0,
+        },
+        {
+          name: "left_shoulder_x",
+          label: "左手臂側抬",
+          type: "range",
+          min: 0,
+          max: 90,
+          value: 0,
+        },
+        {
+          name: "left_elbow_y",
+          label: "左手肘上抬",
+          type: "range",
+          min: 0,
+          max: 75,
+          value: 0,
+        },
+      ];
+    </script>
     <script name="create_sliders">
       document.addEventListener("DOMContentLoaded", function () {
-        const slidersContainer = document.getElementById('joint-sliders');
-        const joints = [
-            { name: 'neck_z', label: '頭部水平', min: -30, max: 30, value: 0 },
-            { name: 'neck_y', label: '頭部垂直', min: -20, max: 20, value: 0 },
-            { name: 'right_shoulder_z', label: '右肩內轉', min: 0, max: 90, value: 0 },
-            { name: 'right_shoulder_y', label: '右肩上抬', min: -55, max: 200, value: 0 },
-            { name: 'right_shoulder_x', label: '右手臂側抬', min: 0, max: 90, value: 0 },
-            { name: 'right_elbow_y', label: '右手肘上抬', min: 0, max: 75, value: 0 },
-            { name: 'left_shoulder_z', label: '左肩內轉', min: 0, max: 90, value: 0 },
-            { name: 'left_shoulder_y', label: '左肩上抬', min: -55, max: 200, value: 0 },
-            { name: 'left_shoulder_x', label: '左手臂側抬', min: 0, max: 90, value: 0 },
-            { name: 'left_elbow_y', label: '左手肘上抬', min: 0, max: 75, value: 0 },
-        ];
+        const slidersContainer = document.getElementById("joint-sliders");
 
-        let slidersHTML = '';
-        joints.forEach(joint => {
+        let slidersHTML = "";
+        joints.forEach((joint) => {
             slidersHTML += `
                 <div class="form-group">
                     <label for="${joint.name}-slider">${joint.label}: <span id="${joint.name}-value">${joint.value}</span></label>
@@ -413,49 +459,54 @@
     </script>
     <script name="handle_sliders">
       document.addEventListener("DOMContentLoaded", function () {
-        const joints = [
-            { name: 'neck_z', label: '頭部水平', min: -30, max: 30, value: 0 },
-            { name: 'neck_y', label: '頭部垂直', min: -20, max: 20, value: 0 },
-            { name: 'right_shoulder_z', label: '右肩內轉', min: 0, max: 90, value: 0 },
-            { name: 'right_shoulder_y', label: '右肩上抬', min: -55, max: 200, value: 0 },
-            { name: 'right_shoulder_x', label: '右手臂側抬', min: 0, max: 90, value: 0 },
-            { name: 'right_elbow_y', label: '右手肘上抬', min: 0, max: 75, value: 0 },
-            { name: 'left_shoulder_z', label: '左肩內轉', min: 0, max: 90, value: 0 },
-            { name: 'left_shoulder_y', label: '左肩上抬', min: -55, max: 200, value: 0 },
-            { name: 'left_shoulder_x', label: '左手臂側抬', min: 0, max: 90, value: 0 },
-            { name: 'left_elbow_y', label: '左手肘上抬', min: 0, max: 75, value: 0 },
-        ];
 
         function update_joint_angle(jointName, degrees) {
-            if (xrobot && xrobot.joint && xrobot.joint[jointName]) {
-                const joint = xrobot.joint[jointName];
-                let actualDegrees = degrees;
-                const invertedJoints = ['right_shoulder_y', 'right_shoulder_x', 'right_elbow_y', 'left_shoulder_z', 'left_shoulder_y', 'left_elbow_y'];
-                if (invertedJoints.includes(jointName)) {
-                    actualDegrees = -degrees;
-                }
-
-                const radians = actualDegrees * (Math.PI / 180);
-                
-                // xyz_axis is an array like [0, 1, 0]
-                // We multiply the radians with the axis to apply rotation to the correct axis
-                joint.rotate[0] = joint.xyz_axis[0] * radians;
-                joint.rotate[1] = joint.xyz_axis[1] * radians;
-                joint.rotate[2] = joint.xyz_axis[2] * radians;
+          if (xrobot && xrobot.joint && xrobot.joint[jointName]) {
+            const joint = xrobot.joint[jointName];
+            let actualDegrees = degrees;
+            const invertedJoints = [
+              "right_shoulder_y",
+              "right_shoulder_x",
+              "right_elbow_y",
+              "left_shoulder_z",
+              "left_shoulder_y",
+              "left_elbow_y",
+            ];
+            if (invertedJoints.includes(jointName)) {
+              actualDegrees = -degrees;
             }
+
+            const radians = actualDegrees * (Math.PI / 180);
+
+            // xyz_axis is an array like [0, 1, 0]
+            // We multiply the radians with the axis to apply rotation to the correct axis
+            joint.rotate[0] = joint.xyz_axis[0] * radians;
+            joint.rotate[1] = joint.xyz_axis[1] * radians;
+            joint.rotate[2] = joint.xyz_axis[2] * radians;
+          }
         }
 
-        joints.forEach(joint => {
-            const slider = document.getElementById(`${joint.name}-slider`);
-            const valueLabel = document.getElementById(`${joint.name}-value`);
+        joints.forEach((joint) => {
+          const sliderEl = document.getElementById(`${joint.name}-slider`);
+          const valueLabel = document.getElementById(`${joint.name}-value`);
 
-            if (slider) {
-                slider.addEventListener('input', function () {
-                    const value = this.value;
-                    valueLabel.textContent = value;
-                    update_joint_angle(joint.name, parseFloat(value));
+          if (sliderEl) {
+            if (joint.name === 'rotate') {
+                sliderEl.addEventListener("input", function () { // Update label in real-time
+                    valueLabel.textContent = this.value;
+                });
+                sliderEl.addEventListener("change", function () { // Trigger function on change
+                    const name = document.getElementById("select1").value;
+                    input_rotate2(name, parseFloat(this.value));
+                });
+            } else { // All other range sliders
+                sliderEl.addEventListener("input", function () {
+                  const value = this.value;
+                  valueLabel.textContent = value;
+                  update_joint_angle(joint.name, parseFloat(value));
                 });
             }
+          }
         });
       });
     </script>
@@ -464,7 +515,11 @@
   <body id="robotContainer">
     <div class="container-fluid">
       <div class="row">
-        <div id="canvas-container" class="col-md-8" style="height: 100vh; padding: 0;"></div>
+        <div
+          id="canvas-container"
+          class="col-md-8"
+          style="height: 100vh; padding: 0"
+        ></div>
         <div class="col-md-4">
           <div class="row vertical-10px">
             <div class="col-md-12">
@@ -480,27 +535,14 @@
                         class="center-block logo"
                       />
                       <div class="text-center col-md-12">
-                        <div id="joint-sliders"></div>
+                        <div id="joint-sliders">
+                        </div>
                         <div class="row">
                           <div class="col-md-2">
                             <div class="input-group">
-                              <select name="select1" id="select1">
+                              <select name="select1" id="select1" hidden>
                                 <option value="footprint">footprint</option>
                               </select>
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="input-group">
-                              <button onclick="rotate()">rotate</button>
-                              <input
-                                id="ex1"
-                                data-slider-id="ex1Slider"
-                                type="text"
-                                data-slider-min="0"
-                                data-slider-max="30"
-                                data-slider-step="1"
-                                data-slider-value="0"
-                              />
                             </div>
                           </div>
 
@@ -519,9 +561,7 @@
                             id="select2"
                             onchange="motion_change()"
                           >
-                            <option value="666_SP_Karate">
-                              666_SP_Karate
-                            </option>
+                            <option></option>
                           </select>
                           <div>
                             <span id="nowPlaying"></span>
