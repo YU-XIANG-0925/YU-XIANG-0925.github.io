@@ -65,36 +65,48 @@ function motion_poll() {
 //function motor_poll(motor, joint, d) {
 function motor_poll(name, time) {
   var bezierlayer = motion[name];
-  var joint = xrobot.joint[name];
-  var motor = xhardware.motor[name];
-  // playform
-  if (motion[name]) {
-    if (name == "platform_theta") {
-      platform_theta = (bezierlayer.evaluate(time / 1000) / 180) * Math.PI;
-      return;
-    }
-    if (name == "platform_x") {
-      platform_x = (bezierlayer.evaluate(time / 1000) / 180) * Math.PI;
-      return;
-    }
-    if (name == "platform_y") {
-      platform_y = (bezierlayer.evaluate(time / 1000) / 180) * Math.PI;
-      return;
-    }
+  if (!bezierlayer || bezierlayer.keys.length === 0) {
+    return;
   }
-  //
-  if (joint == null || bezierlayer == null || bezierlayer.keys.length == 0) {
-    if (bezierlayer) {
-      console.log("motor not found(" + name + ")");
+
+  var degrees = bezierlayer.evaluate(time / 1000);
+  var radians = (degrees / 180) * Math.PI;
+
+  // --- Update Slider and Label ---
+  // Use 'rotate' for the slider name when the motor is 'platform_theta'
+  const sliderName = (name === 'platform_theta') ? 'rotate' : name;
+  const sliderEl = document.getElementById(`${sliderName}-slider`);
+  const valueLabel = document.getElementById(`${sliderName}-value`);
+
+  if (sliderEl && valueLabel) {
+    sliderEl.value = degrees;
+    valueLabel.textContent = Math.round(degrees);
+  }
+  // --- End of Update ---
+
+  if (name.startsWith("platform_")) {
+    if (name === "platform_theta") {
+      platform_theta = radians;
+    } else if (name === "platform_x") {
+      platform_x = radians;
+    } else if (name === "platform_y") {
+      platform_y = radians;
     }
     return;
   }
-  //console.log('motor_poll name'+name+'time='+ time);
-  var val = (bezierlayer.evaluate(time / 1000) / 180) * Math.PI;
-  val *= motor.mayaDirection;
-  joint.rotate[0] = joint.xyz_axis[0] * val;
-  joint.rotate[1] = joint.xyz_axis[1] * val;
-  joint.rotate[2] = joint.xyz_axis[2] * val;
+
+  var joint = xrobot.joint[name];
+  var motor = xhardware.motor[name];
+
+  if (joint == null) {
+    console.log("motor not found(" + name + ")");
+    return;
+  }
+  
+  var finalRadians = radians * motor.mayaDirection;
+  joint.rotate[0] = joint.xyz_axis[0] * finalRadians;
+  joint.rotate[1] = joint.xyz_axis[1] * finalRadians;
+  joint.rotate[2] = joint.xyz_axis[2] * finalRadians;
 }
 /*
  * obj
