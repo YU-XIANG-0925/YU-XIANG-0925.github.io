@@ -1,18 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // 來自 robot.html 的關節定義
-    const joints = [
-        { name: "neck_z", label: "頭部水平", min: -30, max: 30, defaultValue: 0 },
-        { name: "neck_y", label: "頭部垂直", min: -20, max: 20, defaultValue: 0 },
-        { name: "right_shoulder_z", label: "右肩內轉", min: 0, max: 90, defaultValue: 3.0 },
-        { name: "right_shoulder_y", label: "右肩上抬", min: -55, max: 200, defaultValue: 8.0 },
-        { name: "right_shoulder_x", label: "右手臂側抬", min: 0, max: 90, defaultValue: 5.0 },
-        { name: "right_elbow_y", label: "右手肘上抬", min: 0, max: 75, defaultValue: -15.0 },
-        { name: "left_shoulder_z", label: "左肩內轉", min: 0, max: 90, defaultValue: 3.0 },
-        { name: "left_shoulder_y", label: "左肩上抬", min: -55, max: 200, defaultValue: 8.0 },
-        { name: "left_shoulder_x", label: "左手臂側抬", min: 0, max: 90, defaultValue: 5.0 },
-        { name: "left_elbow_y", label: "左手肘上抬", min: 0, max: 75, defaultValue: -15.0 },
-    ];
-    // 平台相關的 Timeline，目前是固定的
+    // joints 變數已在 robot.html 中定義，此處不再重複定義。
+    // platformJoints 只在編輯器生成 XML 時使用，在此定義。
     const platformJoints = [
         { name: "platform_y", defaultValue: 0.0 },
         { name: "platform_x", defaultValue: 0.0 },
@@ -20,46 +8,61 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
 
     function initializeEditor() {
-        document.getElementById('add-frame-btn').addEventListener('click', addKeyframe);
-        document.getElementById('save-xml-btn').addEventListener('click', saveToFile);
+        if (document.getElementById('add-frame-btn')) {
+            document.getElementById('add-frame-btn').addEventListener('click', addKeyframe);
+        }
+        if (document.getElementById('save-xml-btn')) {
+            document.getElementById('save-xml-btn').addEventListener('click', saveToFile);
+        }
     }
 
     function addKeyframe() {
         const container = document.getElementById('keyframes-container');
-        const frameId = `frame-${Date.now()}`;
+        // 確保全域的 joints 變數已載入
+        if (!container || typeof joints === 'undefined') {
+            console.error("Cannot add keyframe: container or global 'joints' not found.");
+            return;
+        }
+
+        const frameId = 'frame-' + Date.now();
         const card = document.createElement('div');
         card.className = 'card keyframe-card mb-2';
-        card.innerHTML = "`
-            <div class=\"card-header\" id=\"heading-${frameId}\">
-                <h5 class=\"mb-0\">
-                    <button class=\"btn btn-link\" data-toggle=\"collapse\" data-target=\"#collapse-${frameId}\" aria-expanded=\"true\" aria-controls=\"collapse-${frameId}\">
-                        關鍵影格設定
-                    </button>
-                    <button class=\"btn btn-danger btn-sm float-right delete-frame-btn\">刪除</button>
-                </h5>
-            </div>
-            <div id=\"collapse-${frameId}\" class=\"collapse show\" aria-labelledby=\"heading-${frameId}\">
-                <div class=\"card-body\">
-                    <div class=\"form-group\">
-                        <label>影格編號 (Frame Number)</label>
-                        <input type=\"number\" class=\"form-control frame-number\" placeholder=\"例如：10\" value=\"0">
-                    </div>
-                    <button class=\"btn btn-info record-pose-btn mb-3\">記錄當前姿勢</button>
-                    <div class=\"joint-values-container row\">
-                        ${joints.map(joint => `
-                            <div class=\"form-group col-md-4\">
-                                <label>${joint.label} (${joint.name})</label>
-                                <input type=\"text\" class=\"form-control joint-value\" data-joint-name=\"${joint.name}\" value=\"${joint.defaultValue}\" readonly>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            </div>
-        `";
+
+        let jointInputsHTML = joints.filter(j => j.name !== 'rotate').map(function(joint) {
+            return (
+                '<div class="form-group col-md-4">' +
+                '    <label>' + joint.label + ' (' + joint.name + ')</label>' +
+                '    <input type="text" class="form-control joint-value" data-joint-name="' + joint.name + '" value="' + (document.getElementById(joint.name + '-slider') ? document.getElementById(joint.name + '-slider').value : 0) + '" readonly>' +
+                '</div>'
+            );
+        }).join('');
+
+        let cardHTML =
+            '<div class="card-header" id="heading-' + frameId + '">' +
+            '    <h5 class="mb-0">' +
+            '        <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-' + frameId + '" aria-expanded="true" aria-controls="collapse-' + frameId + '">' +
+            '            關鍵影格設定' +
+            '        </button>' +
+            '        <button class="btn btn-danger btn-sm float-right delete-frame-btn">刪除</button>' +
+            '    </h5>' +
+            '</div>' +
+            '<div id="collapse-' + frameId + '" class="collapse show" aria-labelledby="heading-' + frameId + '">' +
+            '    <div class="card-body">' +
+            '        <div class="form-group">' +
+            '            <label>影格編號 (Frame Number)</label>' +
+            '            <input type="number" class="form-control frame-number" placeholder="例如：10" value="0">' +
+            '        </div>' +
+            '        <button class="btn btn-info record-pose-btn mb-3">記錄當前姿勢</button>' +
+            '        <div class="joint-values-container row">' +
+                         jointInputsHTML +
+            '        </div>' +
+            '    </div>' +
+            '</div>';
+
+        card.innerHTML = cardHTML;
 
         container.appendChild(card);
         
-        // 綁定新按鈕的事件
         card.querySelector('.record-pose-btn').addEventListener('click', function() {
             recordPose(this);
         });
@@ -69,12 +72,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function recordPose(buttonElement) {
+        if (typeof joints === 'undefined') return;
         const cardBody = buttonElement.closest('.card-body');
-        joints.forEach(joint => {
-            const slider = document.getElementById(`${joint.name}-slider`);
+        joints.filter(j => j.name !== 'rotate').forEach(joint => {
+            const slider = document.getElementById(joint.name + '-slider');
             if (slider) {
                 const value = slider.value;
-                const input = cardBody.querySelector(`.joint-value[data-joint-name="${joint.name}"]`);
+                const input = cardBody.querySelector('.joint-value[data-joint-name="' + joint.name + '"]');
                 if (input) {
                     input.value = value;
                 }
@@ -88,31 +92,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function generateXML() {
+        console.log("generateXML function called.");
+        if (typeof joints === 'undefined' || typeof platformJoints === 'undefined') {
+            console.error("Global 'joints' or local 'platformJoints' variable not found.");
+            return null;
+        }
+
         const motionName = document.getElementById('motionName').value || 'MyCustomMotion';
         const fps = document.getElementById('motionFps').value;
         const keyframeCards = document.querySelectorAll('.keyframe-card');
+        console.log(`Found ${keyframeCards.length} keyframe cards.`);
 
         if (keyframeCards.length === 0) {
+            console.error('No keyframes found. Aborting XML generation.');
             alert('請至少新增一個關鍵影格！');
             return null;
         }
 
         let keyframesData = [];
-        let minFrame = Infinity;
-        let maxFrame = -Infinity;
-
         keyframeCards.forEach(card => {
             const frameNumberInput = card.querySelector('.frame-number');
             const frame = parseInt(frameNumberInput.value, 10);
 
             if (isNaN(frame)) {
-                // 如果使用者沒有輸入有效的影格數字，可以跳過或給予預設值
+                console.warn("Skipping a keyframe with invalid frame number.");
                 return; 
             }
-
-            minFrame = Math.min(minFrame, frame);
-            maxFrame = Math.max(maxFrame, frame);
-
+            
             let frameValues = { frame: frame, values: {} };
             card.querySelectorAll('.joint-value').forEach(input => {
                 frameValues.values[input.dataset.jointName] = parseFloat(input.value);
@@ -120,72 +126,82 @@ document.addEventListener("DOMContentLoaded", function () {
             keyframesData.push(frameValues);
         });
         
+        console.log("Parsed keyframes data:", keyframesData);
+
         if (keyframesData.length === 0) {
+            console.error('No valid keyframes data. Aborting XML generation.');
             alert('沒有有效的關鍵影格！');
             return null;
         }
 
-        // 根據 frame 數字排序
         keyframesData.sort((a, b) => a.frame - b.frame);
         
         const startFrame = keyframesData[0].frame;
         const endFrame = keyframesData[keyframesData.length - 1].frame;
+        console.log(`Calculated startFrame: ${startFrame}, endFrame: ${endFrame}`);
 
+        const motorJoints = joints.filter(j => j.name !== 'rotate');
 
-        let motorTimelineLayers = '';
-        joints.forEach(joint => {
-            motorTimelineLayers += `      <bezierLayer tag="${joint.name}" id="0" color="-65536">
-`; // 顏色可自行更換
+        let motorTimelineLayers = motorJoints.map(joint => {
+            let layer = '      <bezierLayer tag="' + joint.name + '" id="0" color="-65536">';
             keyframesData.forEach(kf => {
-                motorTimelineLayers += `         <BezierKey frame="${kf.frame}.0" value="${kf.values[joint.name]}" in="AUTO" out="AUTO"/>
-`;
+                const value = kf.values[joint.name] !== undefined ? kf.values[joint.name] : 0;
+                layer += '         <BezierKey frame="' + kf.frame + '.0" value="' + value + '" in="AUTO" out="AUTO"/>';
             });
-            motorTimelineLayers += `      </bezierLayer>
-`;
-        });
+            layer += '      </bezierLayer>';
+            return layer;
+        }).join('\n');
         
-        let platformTimelineLayers = '';
-        platformJoints.forEach(joint => {
-            platformTimelineLayers += `      <bezierLayer tag="${joint.name}" id="0" color="-10223516">
-`;
+        let platformTimelineLayers = platformJoints.map(joint => {
+            let layer = '      <bezierLayer tag="' + joint.name + '" id="0" color="-10223516">';
             keyframesData.forEach(kf => {
-                 platformTimelineLayers += `         <BezierKey frame="${kf.frame}.0" value="${joint.defaultValue}" in="AUTO" out="AUTO"/>
-`;
+                 layer += '         <BezierKey frame="' + kf.frame + '.0" value="' + joint.defaultValue + '" in="AUTO" out="AUTO"/>';
             });
-            platformTimelineLayers += `      </bezierLayer>
-`;
-        });
+            layer += '      </bezierLayer>';
+            return layer;
+        }).join('\n');
 
-
-        const xmlContent = "`
-<motion name=\"${motionName}\" loop=\"false\" startFrame=\"" + startFrame + "\" endFrame=\"" + endFrame + "\" fps=\"" + fps + ".0">
-   <motorTimeline id="0" startDelay="0.0" startFrame=\"" + startFrame + "\" endFrame=\"" + endFrame + "\" fps=\"" + fps + ".0">
-${motorTimelineLayers}
-   </motorTimeline>
-   <platformTimeline id="0" startDelay="0.0" startFrame=\"" + startFrame + "\" endFrame=\"" + endFrame + "\" fps=\"" + fps + ".0">
-${platformTimelineLayers}
-   </platformTimeline>
-</motion>
-        ";
-
+        const xmlContent = 
+            '<motion name="' + motionName + '" loop="false" startFrame="' + startFrame + '" endFrame="' + endFrame + '" fps="' + fps + '.0">' +
+            '   <motorTimeline id="0" startDelay="0.0" startFrame="' + startFrame + '" endFrame="' + endFrame + '" fps="' + fps + '.0">' +
+            motorTimelineLayers + '\n' +
+            '   </motorTimeline>' +
+            '   <platformTimeline id="0" startDelay="0.0" startFrame="' + startFrame + '" endFrame="' + endFrame + '" fps="' + fps + '.0">' +
+            platformTimelineLayers + '\n' +
+            '   </platformTimeline>' +
+            '</motion>';
+        
+        console.log("Final XML content generated.");
         return xmlContent.trim();
     }
 
     function saveToFile() {
+        console.log("saveToFile function called.");
         const xml = generateXML();
-        if (!xml) return;
+        console.log("Generated XML content:", xml);
+
+        if (!xml) {
+            console.error("generateXML returned null or empty. Aborting save.");
+            return;
+        }
 
         const motionName = document.getElementById('motionName').value || 'MyCustomMotion';
         const blob = new Blob([xml], { type: 'application/xml;charset=utf-8' });
+        console.log("Blob object created:", blob);
+
         const url = URL.createObjectURL(blob);
-        
+        console.log("Generated URL:", url);
+
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${motionName}.xml`;
+        a.download = motionName + '.xml';
+        
+        console.log("Creating and clicking download link...", a);
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+        console.log("Download link clicked and removed.");
     }
 
     initializeEditor();
