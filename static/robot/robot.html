@@ -3,7 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <title>ROBOT</title>
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <!-- Bootstrap 4.5.3 CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.3/css/bootstrap.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+    <script src="motion_editor.js"></script>
+
     <script src="../js/plugins/cryptojs/aes.js"></script>
     <script src="../js/plugins/cryptojs/mode-ecb-min.js"></script>
     <script src="../js/plugins/cryptojs/md5-min.js"></script>
@@ -13,17 +22,14 @@
     <script src="three.js"></script>
     <script src="xrobot.js"></script>
     <script src="motion.js"></script>
-    <script src="/static/js/plugins/jQuery/jQuery-2.2.0.min.js"></script>
-    <script src="/static/js/plugins/bootstrap/bootstrap.min.js"></script>
+
+    <!-- bootstrap-slider (compatible with BS4?) keeping it for now -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/bootstrap-slider.min.js"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/css/bootstrap-slider.css"
     />
     <style>
-      .box.box-solid.box-info {
-        border-bottom: 1px solid #00c0ef;
-      }
       .vertical-10px {
         padding-top: 10px;
       }
@@ -33,8 +39,9 @@
       }
       .input-group {
         padding-bottom: 1em;
-        height: 2em;
+        /* BS4 input-group height auto adjustment */
       }
+      /* BS4 buttons have border-radius, but custom overrides: */
       .input-group button {
         border-top-left-radius: 3px;
         border-bottom-left-radius: 3px;
@@ -49,6 +56,10 @@
         height: 100vh;
         overflow-y: auto;
       }
+      /* Custom styles to mimic box-info if needed, or just rely on card */
+      .card-info {
+        border-top: 3px solid #17a2b8;
+      }
     </style>
 
     <script>
@@ -57,8 +68,6 @@
         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FwaS5udXdhcm9ib3RpY3MuY29tIiwic3ViIjoiYXV0aC5udXdhcm9ib3RpY3N8MTgyMDc3MDI3NTM0IiwiYXVkIjoiMzEyNzAxNDYtNzE3Qi00RUYwLTg2NDctRjNBQkQ3M0E4NjMwIiwiaWF0IjoxNzU5NDYxNzkzLCJleHAiOjM1MTg5MjQxODYsImp0aSI6IjM3YTI2Yjg5LThhYjctNDhlZi04YTczLTMyMDlkMWU1MDM0OCIsImNvbnRleHQiOnsidHlwZSI6ImFjY2VzcyIsInByb3ZpZGVyIjoiZGV2ZWxvcGVyfG8yMDM5Mm9AZ21haWwuY29tIn0sInNjb3BlIjoicHJvZmlsZSBhdXRoIGF1dGhfcmVmcmVzaC5nZXQgb3RhIG90YS5nZXQgZGV2ZWxvcGVyIn0.ILbJYRCwhiR_EhzUTtGWrBPUc9SK8_vTARlcYP0aqIjDVIVw5-1ZliuPxFWVtl96Z7uD32RutGFhbvvd9crou_MIu10Cd708phQlLU6FlAB99111hnJjBnPzGcIU-9s7AJyYd4F388ZmvtqdVNy-PJuv1Eeoec-NRx9hVDW0JuCuQ4EsHXPdv2czpmf41eaZCPZdu312O1V6Fyage27sj_HMsWkSnQ8yy_vYc3c-4AaMPr-3xkl74_GCL7MuMOAfzmQvTlZmmWisShHaISTGgWhbHYqAkPyQDMAYLDAUA7XgvrZAPUnjWhK4Vb5GD1r1mOZhKWPnjuduCcNAbr_UIg";
 
       window.onload = function () {
-        //var select2 = document.getElementById('select2').value;
-        //motion_load(xrobot_nuwa + '/assets/motion/' + select2 + '.xml');
         try {
           if (Detector.webgl) {
             if (getQueryStringValue("name")) {
@@ -67,16 +76,12 @@
               motion_change();
             }
             xrobot_init();
-
             three_init();
-
             document.getElementById("nowPlaying").className = "";
           } else {
             var warning = Detector.getWebGLErrorMessage();
             document.getElementById("robotContainer").appendChild(warning);
           }
-
-
         } catch (error) {
           if (error.message === "Cannot read property 'getExtension' of null") {
             document.getElementById("nowPlaying").innerHTML =
@@ -87,6 +92,7 @@
           document.getElementById("nowPlaying").className = "red";
         }
       };
+
       var scheme = "http";
       var env = window.location.hostname.split(".")[0];
       var port = env === "localhost" ? "6700" : "80";
@@ -102,37 +108,28 @@
         env = env.replace("dss", "api");
       }
 
-
-
       function motion_change(value) {
         var select2 = value || document.getElementById("select2").value;
         motion_stop();
-
-        // JSON 檔案儲存在相對於 robot.html 的 ./motions/ 資料夾下的 xml檔案中
         var localXmlPath = "./motions/" + select2;
-
-        console.log("準備載入本地動作檔:", localXmlPath); // 方便除錯
-
-        document.getElementById("nowPlaying").innerHTML =
-          "Play (local): " + select2;
-
-        // 呼叫 motion_load，傳入本地檔案的路徑
+        console.log("準備載入本地動作檔:", localXmlPath);
+        document.getElementById("nowPlaying").innerHTML = "Play (local): " + select2;
         motion_load(localXmlPath);
       }
 
       function getQueryStringValue(key) {
-        return decodeURIComponent(
-          window.location.search.replace(
+    return decodeURIComponent(
+        window.location.search.replace(
             new RegExp(
-              "^(?:.*[&\\?]" +
-                encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") +
+                "^(?:.*[&\\?]" +
+                encodeURIComponent(key).replace(/["\\.+\*]/g, "\\$&") +
                 "(?:\\=([^&]*))?)?.*$",
-              "i"
+                "i"
             ),
             "$1"
-          )
-        );
-      }
+        )
+    );
+}
     </script>
 
     <script name="load_motion">
@@ -363,7 +360,7 @@
           "666_TA_DictateL.xml",
         ];
         var selectElement = document.getElementById("select2");
-        selectElement.innerHTML = ""; // Clear existing options
+        selectElement.innerHTML = "";
         motionFiles.forEach(function (fileName) {
           var option = document.createElement("option");
           option.value = fileName;
@@ -374,9 +371,30 @@
     </script>
     <script>
       const joints = [
-        { name: "rotate", label: "Rotate", type: "range", min: 0, max: 30, value: 0 },
-        { name: "neck_z", label: "頭部水平", type: "range", min: -30, max: 30, value: 0 },
-        { name: "neck_y", label: "頭部垂直", type: "range", min: -20, max: 20, value: 0 },
+        {
+          name: "rotate",
+          label: "Rotate",
+          type: "range",
+          min: 0,
+          max: 30,
+          value: 0,
+        },
+        {
+          name: "neck_z",
+          label: "頭部水平",
+          type: "range",
+          min: -30,
+          max: 30,
+          value: 0,
+        },
+        {
+          name: "neck_y",
+          label: "頭部垂直",
+          type: "range",
+          min: -20,
+          max: 20,
+          value: 0,
+        },
         {
           name: "right_shoulder_z",
           label: "右肩內轉",
@@ -446,10 +464,9 @@
     <script name="create_sliders">
       document.addEventListener("DOMContentLoaded", function () {
         const slidersContainer = document.getElementById("joint-sliders");
-
         let slidersHTML = "";
         joints.forEach((joint) => {
-            slidersHTML += `
+          slidersHTML += `
                 <div class="form-group">
                     <label for="${joint.name}-slider">${joint.label}: <span id="${joint.name}-value">${joint.value}</span></label>
                     <input type="range" class="form-control-range" id="${joint.name}-slider" 
@@ -457,13 +474,11 @@
                 </div>
             `;
         });
-
         slidersContainer.innerHTML = slidersHTML;
       });
     </script>
     <script name="handle_sliders">
       document.addEventListener("DOMContentLoaded", function () {
-
         function update_joint_angle(jointName, degrees) {
           if (xrobot && xrobot.joint && xrobot.joint[jointName]) {
             const joint = xrobot.joint[jointName];
@@ -479,34 +494,28 @@
             if (invertedJoints.includes(jointName)) {
               actualDegrees = -degrees;
             }
-
             const radians = actualDegrees * (Math.PI / 180);
-
-            // xyz_axis is an array like [0, 1, 0]
-            // We multiply the radians with the axis to apply rotation to the correct axis
             joint.rotate[0] = joint.xyz_axis[0] * radians;
             joint.rotate[1] = joint.xyz_axis[1] * radians;
             joint.rotate[2] = joint.xyz_axis[2] * radians;
           }
         }
-
         joints.forEach((joint) => {
           const sliderEl = document.getElementById(`${joint.name}-slider`);
           const valueLabel = document.getElementById(`${joint.name}-value`);
-
           if (sliderEl) {
-            if (joint.name === 'rotate') {
-                sliderEl.addEventListener("input", function () { // Update label and trigger function in real-time
-                    valueLabel.textContent = this.value;
-                    const name = document.getElementById("select1").value;
-                    input_rotate2(name, parseFloat(this.value));
-                });
-            } else { // All other range sliders
-                sliderEl.addEventListener("input", function () {
-                  const value = this.value;
-                  valueLabel.textContent = value;
-                  update_joint_angle(joint.name, parseFloat(value));
-                });
+            if (joint.name === "rotate") {
+              sliderEl.addEventListener("input", function () {
+                valueLabel.textContent = this.value;
+                const name = document.getElementById("select1").value;
+                input_rotate2(name, parseFloat(this.value));
+              });
+            } else {
+              sliderEl.addEventListener("input", function () {
+                const value = this.value;
+                valueLabel.textContent = value;
+                update_joint_angle(joint.name, parseFloat(value));
+              });
             }
           }
         });
@@ -525,98 +534,110 @@
         <div class="col-md-4 sidebar-container">
           <div class="row vertical-10px">
             <div class="col-md-12">
-              <div class="box box-solid box-info">
-                <div class="box-body"></div>
+              <!-- Converted AdminLTE box to BS4 card -->
+              <div class="card card-info mb-3">
+                <div class="card-body">
+                  <div class="row justify-content-center">
+                    <img
+                      src="/static/img/logo.png"
+                      class="img-fluid logo"
+                      alt="Logo"
+                    />
+                    <div class="col-md-12 text-center">
+                      <div id="joint-sliders" class="text-left"></div>
 
-                <div>
-                  <div class="box-header"></div>
-                  <div class="box-body">
-                    <div class="row">
-                      <img
-                        src="/static/img/logo.png"
-                        class="center-block logo"
-                      />
-                      <div class="text-center col-md-12">
-                        <div id="joint-sliders">
-                        </div>
-                        <div class="row">
-                          <div class="col-md-2">
-                            <div class="input-group">
-                              <select name="select1" id="select1" hidden>
-                                <option value="footprint">footprint</option>
-                              </select>
-                            </div>
-                          </div>
-
-                          <div class="col-md-3">
-                            <div class="input-group">
-                              <button onclick="motion_start_stop()">
-                                start / stop
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="input-group">
+                      <div class="row mb-3">
+                        <div class="col-md-2">
+                          <!-- Hidden select -->
                           <select
-                            name="select2"
-                            id="select2"
-                            onchange="motion_change()"
+                            name="select1"
+                            id="select1"
+                            class="form-control"
+                            hidden
                           >
-                            <option></option>
+                            <option value="footprint">footprint</option>
                           </select>
-                          <div>
-                            <span id="nowPlaying"></span>
-                            <span id="fps"></span>
+                        </div>
+                        <div class="col-md-12">
+                          <button
+                            class="btn btn-secondary btn-block"
+                            onclick="motion_start_stop()"
+                          >
+                            Start / Stop
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <select
+                          name="select2"
+                          id="select2"
+                          class="form-control"
+                          onchange="motion_change()"
+                        >
+                          <option></option>
+                        </select>
+                      </div>
+
+                      <div class="mt-2">
+                        <span id="nowPlaying" class="d-block"></span>
+                        <span id="fps" class="d-block"></span>
+                      </div>
+
+                      <!-- Motion Editor Section -->
+                      <div id="motion-editor" class="mt-4 text-left">
+                        <hr />
+                        <h4>動作編輯器</h4>
+
+                        <!-- Global Settings -->
+                        <div class="card mb-3">
+                          <div class="card-body">
+                            <h5 class="card-title">全局設定</h5>
+                            <div class="row">
+                              <div class="form-group col-md-6">
+                                <label for="motionName">動作名稱</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  id="motionName"
+                                  placeholder="例如：MyCustomMotion"
+                                />
+                              </div>
+                              <div class="form-group col-md-6">
+                                <label for="motionFps">FPS (每秒影格數)</label>
+                                <select id="motionFps" class="form-control">
+                                  <option value="24" selected>24</option>
+                                  <option value="30">30</option>
+                                </select>
+                              </div>
+                            </div>
                           </div>
                         </div>
 
-                        <div id="motion-editor" class="mt-4">
-                            <hr>
-                            <h4>動作編輯器</h4>
-                        
-                            <!-- 全局設定 -->
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">全局設定</h5>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label for="motionName">動作名稱</label>
-                                            <input type="text" class="form-control" id="motionName" placeholder="例如：MyCustomMotion">
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label for="motionFps">FPS (每秒影格數)</label>
-                                            <select id="motionFps" class="form-control">
-                                                <option value="24" selected>24</option>
-                                                <option value="30">30</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                            <!-- 關鍵影格容器 -->
-                            <div id="keyframes-container">
-                                <!-- JavaScript 將會在這裡動態插入影格 -->
-                            </div>
-                        
-                            <!-- 控制按鈕 -->
-                            <div class="mt-3">
-                                <button id="add-frame-btn" class="btn btn-primary">新增關鍵影格</button>
-                                <button id="save-xml-btn" class="btn btn-success">儲存為 XML</button>
-                            </div>
+                        <!-- Keyframes Container -->
+                        <div id="keyframes-container">
+                          <!-- JS will insert keyframes here -->
                         </div>
 
+                        <!-- Control Buttons -->
+                        <div class="mt-3">
+                          <button id="add-frame-btn" class="btn btn-primary">
+                            新增關鍵影格
+                          </button>
+                          <button id="save-xml-btn" class="btn btn-success">
+                            儲存為 XML
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <!-- End card -->
             </div>
           </div>
         </div>
       </div>
     </div>
-    <script src="motion_editor.js"></script>
   </body>
 </html>
